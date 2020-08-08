@@ -1,10 +1,17 @@
-"  __  __         _   _ _____ _____     _____ __  __
-" |  \/  |_   _  | \ | | ____/ _ \ \   / /_ _|  \/  |
-" | |\/| | | | | |  \| |  _|| | | \ \ / / | || |\/| |
-" | |  | | |_| | | |\  | |__| |_| |\ V /  | || |  | |
-" |_|  |_|\__, | |_| \_|_____\___/  \_/  |___|_|  |_|
-"         |___/
-" 
+" +-----------------------------------------------------+
+" |  __  __         _   _ _____ _____     _____ __  __  |
+" | |  \/  |_   _  | \ | | ____/ _ \ \   / /_ _|  \/  | |
+" | | |\/| | | | | |  \| |  _|| | | \ \ / / | || |\/| | |
+" | | |  | | |_| | | |\  | |__| |_| |\ V /  | || |  | | |
+" | |_|  |_|\__, | |_| \_|_____\___/  \_/  |___|_|  |_| |
+" |         |___/                                       |
+" |                                                     |
+" +-----------------------------------------------------+
+
+
+" ==========
+" global set
+" ==========
 
 syntax on
 
@@ -31,17 +38,23 @@ set sw=4
 
 exec "nohlsearch"
 
+
+" ======
+" keymap
+" ======
+
+noremap <C-n> :NERDTreeToggle<CR>
+
 inoremap ( ()<ESC>i
 inoremap [ []<ESC>i
 inoremap { {}<ESC>i
 inoremap ' ''<ESC>i
 inoremap " ""<ESC>i
 
-func! s:transparent_background()
-    highlight Normal guibg=None ctermbg=None
-    highlight NonText guibg=None ctermbg=None
-endf
-autocmd ColorScheme * call s:transparent_background()
+
+" ======
+" plugin
+" ======
 
 call plug#begin('~/.config/nvim/plugged') 
 
@@ -53,11 +66,33 @@ Plug 'ryanoasis/vim-devicons'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+Plug 'preservim/nerdtree'
+
 call plug#end()
  
-let g:coc_global_extensions = ['coc-clangd', 'coc-json', 'coc-tsserver']
+let g:coc_global_extensions = [
+		\		'coc-clangd', 
+		\		'coc-json', 
+		\		'coc-tsserver'
+		\	]
+
+
+" ======
+" themes
+" ======
+
+func! s:transparent_background()
+    highlight Normal guibg=None ctermbg=None
+    highlight NonText guibg=None ctermbg=None
+endf
+autocmd ColorScheme * call s:transparent_background()
 
 " colorscheme gruvbox
+
+
+" =========
+" coderuner
+" =========
 
 noremap <F5> :call CompileRunCode()<CR>
 func! CompileRunCode()
