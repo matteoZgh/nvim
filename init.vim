@@ -36,6 +36,12 @@ set scrolloff=2
 set ts=4
 set sw=4
 
+set foldmethod=indent
+set foldlevel=99
+set foldenable
+
+" set termguicolors
+
 exec "nohlsearch"
 
 
@@ -50,6 +56,43 @@ inoremap [ []<ESC>i
 inoremap { {}<ESC>i
 inoremap ' ''<ESC>i
 inoremap " ""<ESC>i
+
+vnoremap <C-y> "+y
+noremap <C-p> "+p
+
+noremap <LEADER><CR> :nohlsearch<CR>
+
+func! Tab()
+	return pumvisible() ? "\<C-n>" : "\<TAB>"
+endfunc
+inoremap <expr> <TAB> Tab()
+
+func! Comment()
+	if &filetype == 'cpp'
+		let s:index = getpos(".")[1]
+		exec s:index."s,^,// ,g"
+	elseif &filetype == 'python'
+		let s:index = getpos(".")[1]
+		exec s:index."s/^/# /g"
+	elseif &filetype == 'vim'
+		let s:index = getpos(".")[1]
+		exec s:index."s/^/\" /g"
+	endif
+endfunc
+func! Uncomment()
+	if &filetype == 'cpp'
+		let s:index = getpos(".")[1]
+		exec s:index."s,^// ,,g"
+	elseif &filetype == 'python'
+		let s:index = getpos(".")[1]
+		exec s:index."s/^# //g"
+	elseif &filetype == 'vim'
+		let s:index = getpos(".")[1]
+		exec s:index."s/^\" //g"
+	endif
+endfunc
+noremap <silent> <C-j> :call Comment()<CR>
+noremap <silent> <C-k> :call Uncomment()<CR>
 
 
 " ======
@@ -72,6 +115,7 @@ call plug#end()
  
 let g:coc_global_extensions = [
 		\		'coc-clangd', 
+		\		'coc-python',
 		\		'coc-json', 
 		\		'coc-tsserver'
 		\	]
@@ -84,7 +128,7 @@ let g:coc_global_extensions = [
 func! s:transparent_background()
     highlight Normal guibg=None ctermbg=None
     highlight NonText guibg=None ctermbg=None
-endf
+endfunc
 autocmd ColorScheme * call s:transparent_background()
 
 " colorscheme gruvbox
@@ -105,6 +149,14 @@ func! CompileRunCode()
 		:set nonumber
 		:set norelativenumber
 		:term ./%<
+		:noremap <buffer> q :q<CR>
+	elseif &filetype == 'python'
+		set splitbelow
+		:sp
+		:res -15
+		:set nonumber
+		:set norelativenumber
+		:term python3 %
+		:noremap <buffer> q :q<CR>
 	endif
 endfunc
-
