@@ -67,30 +67,6 @@ func! Tab()
 endfunc
 inoremap <expr> <TAB> Tab()
 
-func! Comment()
-	if &filetype == 'cpp'
-		let s:index = getpos(".")[1]
-		exec s:index."s,^,// ,g"
-	elseif &filetype == 'python'
-		let s:index = getpos(".")[1]
-		exec s:index."s/^/# /g"
-	elseif &filetype == 'vim'
-		let s:index = getpos(".")[1]
-		exec s:index."s/^/\" /g"
-	endif
-endfunc
-func! Uncomment()
-	if &filetype == 'cpp'
-		let s:index = getpos(".")[1]
-		exec s:index."s,^// ,,g"
-	elseif &filetype == 'python'
-		let s:index = getpos(".")[1]
-		exec s:index."s/^# //g"
-	elseif &filetype == 'vim'
-		let s:index = getpos(".")[1]
-		exec s:index."s/^\" //g"
-	endif
-endfunc
 noremap <silent> <C-j> :call Comment()<CR>
 noremap <silent> <C-k> :call Uncomment()<CR>
 
@@ -110,6 +86,8 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'preservim/nerdtree'
+
+Plug 'matteoZgh/vim-comment'
 
 call plug#end()
  
@@ -141,7 +119,16 @@ autocmd ColorScheme * call s:transparent_background()
 noremap <F5> :call CompileRunCode()<CR>
 func! CompileRunCode()
 	exec "w"
-	if &filetype == 'cpp'
+	if &filetype == 'c'
+		set splitbelow
+		exec "!gcc % -o %<"
+		:sp
+		:res -15
+		:set nonumber
+		:set norelativenumber
+		:term ./%<
+		:noremap <buffer> q :q<CR>
+	elseif &filetype == 'cpp'
 		set splitbelow
 		exec "!g++ -std=c++11 % -o %<"
 		:sp
@@ -149,6 +136,15 @@ func! CompileRunCode()
 		:set nonumber
 		:set norelativenumber
 		:term ./%<
+		:noremap <buffer> q :q<CR>
+	elseif &filetype == 'java'
+		set splitbelow
+		exec "!javac %"
+		:sp
+		:res -15
+		:set nonumber
+		:set norelativenumber
+		:term java %<
 		:noremap <buffer> q :q<CR>
 	elseif &filetype == 'python'
 		set splitbelow
