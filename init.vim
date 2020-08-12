@@ -88,6 +88,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'preservim/nerdtree'
 
 Plug 'matteoZgh/vim-comment'
+Plug 'matteoZgh/vim-google-translator'
 
 call plug#end()
  
