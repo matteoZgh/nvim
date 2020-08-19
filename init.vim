@@ -40,9 +40,20 @@ set foldmethod=indent
 set foldlevel=99
 set foldenable
 
+set noshowmode
+
 " set termguicolors
 
 exec "nohlsearch"
+
+silent !mkdir -p ~/.config/nvim/tmp/backup
+silent !mkdir -p ~/.config/nvim/tmp/undo
+set backupdir=~/.config/nvim/tmp/backup,.
+set directory=~/.config/nvim/tmp/backup,.
+if has('persistent_undo')
+	set undofile
+	set undodir=~/.config/nvim/tmp/undo,.
+endif
 
 
 " ======
@@ -77,9 +88,7 @@ noremap <silent> <C-k> :call Uncomment()<CR>
 
 call plug#begin('~/.config/nvim/plugged') 
 
-" Plug 'vim-airline/vim-airline'
-
-Plug 'morhetz/gruvbox'
+Plug 'itchyny/lightline.vim'
 
 Plug 'ryanoasis/vim-devicons'
 
@@ -99,6 +108,30 @@ let g:coc_global_extensions = [
 		\		'coc-tsserver'
 		\	]
 
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ 'mode_map': {
+        \ 'n' : 'N',
+        \ 'i' : 'I',
+        \ 'R' : 'R',
+        \ 'v' : 'V',
+        \ 'V' : 'VL',
+        \ "\<C-v>": 'VB',
+        \ 'c' : 'C',
+        \ 's' : 'S',
+        \ 'S' : 'SL',
+        \ "\<C-s>": 'SB',
+        \ 't': 'T',
+        \ },
+      \ }
+
 
 " ======
 " themes
@@ -109,8 +142,6 @@ func! s:transparent_background()
     highlight NonText guibg=None ctermbg=None
 endfunc
 autocmd ColorScheme * call s:transparent_background()
-
-" colorscheme gruvbox
 
 
 " =========
