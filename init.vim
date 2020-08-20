@@ -62,12 +62,6 @@ endif
 
 noremap <C-n> :NERDTreeToggle<CR>
 
-inoremap ( ()<ESC>i
-inoremap [ []<ESC>i
-inoremap { {}<ESC>i
-inoremap ' ''<ESC>i
-inoremap " ""<ESC>i
-
 vnoremap <C-y> "+y
 noremap <C-p> "+p
 
